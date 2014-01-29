@@ -44,8 +44,18 @@ function resizableCanvas(canvas) {
 
                     if (y >= -margin && y <= margin) {
                         edges.top = true;
-                    } else if (y >= canvas.height - margin && x <= canvas.height + margin) {
+                    } else if (y >= canvas.height - margin && y <= canvas.height + margin) {
                         edges.bottom = true;
+                    }
+
+                    if (edges.top && edges.left || edges.bottom && edges.right) {
+                        canvas.style.cursor = 'nwse-resize';
+                    } else if (edges.top && edges.right || edges.bottom && edges.left) {
+                        canvas.style.cursor = 'nesw-resize';
+                    } else if (edges.top || edges.bottom) {
+                        canvas.style.cursor = 'ns-resize';
+                    } else if (edges.left || edges.right) {
+                        canvas.style.cursor = 'ew-resize';
                     }
                 });
             }
