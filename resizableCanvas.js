@@ -19,9 +19,35 @@ function resizableCanvas(canvas) {
     var properties = {
         onResize: {
             value: function (callback) {
-                window.onresize = function () {
-                    callback('window', window.innerWidth, window.innerHeight);
-                }
+                var mousedown;
+                window.addEventListener('resize', function () {
+                    callback(window.innerWidth, window.innerHeight, 'window');
+                });
+                window.addEventListener('mousedown', function () {
+                    mousedown = true;
+                });
+                window.addEventListener('mouseup', function () {
+                    mousedown = false;
+                });
+                window.addEventListener('mousemove', function (event) {
+                    var container = canvas.getBoundingClientRect();
+                        x = event.clientX - container.left, 
+                        y = event.clientY - container.top,
+                        margin = 10,
+                        edges = {};
+
+                    if (x >= -margin && x <= margin) {
+                        edges.left = true;
+                    } else if (x >= canvas.width - margin && x <= canvas.width + margin) {
+                        edges.right = true;
+                    }
+
+                    if (y >= -margin && y <= margin) {
+                        edges.top = true;
+                    } else if (y >= canvas.height - margin && x <= canvas.height + margin) {
+                        edges.bottom = true;
+                    }
+                });
             }
         },
         setSize: {
