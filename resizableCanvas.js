@@ -40,10 +40,11 @@ function resizableCanvas(canvas) {
                     mousedown = false;
                 });
                 window.addEventListener('mousemove', function (event) {
-                    var container = canvas.getBoundingClientRect();
+                    var container = canvas.getBoundingClientRect(),
                         x = event.clientX - container.left, 
                         y = event.clientY - container.top,
-                        margin = 10;
+                        margin = 10,
+                        canvasOffset;
                     edges = {};
 
                     if (x >= -margin && x <= margin) {
@@ -77,16 +78,28 @@ function resizableCanvas(canvas) {
                         } else if (lastEdges.top && lastEdges.left) {
                             canvas.width += cursor.x - event.clientX;
                             canvas.height += cursor.y - event.clientY;
+                            canvasOffset = parseInt(canvas.style.marginTop) || 0;
+                            canvas.style.marginTop = parseInt(canvasOffset - cursor.y + event.clientY) + 'px';
+                            canvasOffset = parseInt(canvas.style.marginLeft) || 0;
+                            canvas.style.marginLeft = parseInt(canvasOffset - cursor.x + event.clientX) + 'px';
                         } else if (lastEdges.bottom && lastEdges.left) {
                             canvas.width += cursor.x - event.clientX;
                             canvas.height -= cursor.y - event.clientY;
+                            canvasOffset = parseInt(canvas.style.marginLeft) || 0;
+                            canvas.style.marginLeft = parseInt(canvasOffset - cursor.x + event.clientX) + 'px';
                         } else if (lastEdges.top && lastEdges.right) {
                             canvas.width -= cursor.x - event.clientX;
                             canvas.height += cursor.y - event.clientY;
+                            canvasOffset = parseInt(canvas.style.marginTop) || 0;
+                            canvas.style.marginTop = parseInt(canvasOffset - cursor.y + event.clientY) + 'px';
                         } else if (lastEdges.top) {
                             canvas.height += cursor.y - event.clientY;
+                            canvasOffset = parseInt(canvas.style.marginTop) || 0;
+                            canvas.style.marginTop = parseInt(canvasOffset - cursor.y + event.clientY) + 'px';
                         } else if (lastEdges.left) {
                             canvas.width += cursor.x - event.clientX;
+                            canvasOffset = parseInt(canvas.style.marginLeft) || 0;
+                            canvas.style.marginLeft = parseInt(canvasOffset - cursor.x + event.clientX) + 'px';
                         } else if (lastEdges.bottom) {
                             canvas.height -= cursor.y - event.clientY;
                         } else if (lastEdges.right) {
