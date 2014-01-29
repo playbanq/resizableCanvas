@@ -17,12 +17,16 @@ function resizableCanvas(canvas) {
 
     // Track cursor position
     var cursor = { x: undefined, y: undefined },
-        edges = {};
+        edges = {},
+        minWidth,
+        minHeight;
 
     // Define the canvas object interface
     var properties = {
         onResize: {
-            value: function (minWidth, minHeight, callback) {
+            value: function (minimumWidth, minimumHeight, callback) {
+                minWidth = minimumWidth;
+                minHeight = minimumHeight;
                 var mousedown;
                 window.addEventListener('resize', function () {
                     if (window.innerWidth < canvas.width && window.innerWidth >= minWidth) {
