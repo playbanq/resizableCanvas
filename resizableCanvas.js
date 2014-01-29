@@ -22,13 +22,13 @@ function resizableCanvas(canvas) {
     // Define the canvas object interface
     var properties = {
         onResize: {
-            value: function (callback) {
+            value: function (minWidth, minHeight, callback) {
                 var mousedown;
                 window.addEventListener('resize', function () {
-                    if (window.innerWidth < canvas.width) {
+                    if (window.innerWidth < canvas.width && window.innerWidth >= minWidth) {
                         canvas.width = window.innerWidth;
                     }
-                    if (window.innerHeight < canvas.height) {
+                    if (window.innerHeight < canvas.height && window.innerHeight >= minHeight) {
                         canvas.height = window.innerHeight;
                     }
                     callback(canvas.width, canvas.height, 'window');
@@ -111,6 +111,13 @@ function resizableCanvas(canvas) {
                         } else if (lastEdges.right) {
                             canvas.width -= cursor.x - event.clientX;
                         } 
+
+                        if (canvas.width < minWidth) {
+                            canvas.width = minWidth;
+                        }
+                        if (canvas.height < minHeight) {
+                            canvas.height = minHeight;
+                        }
                         callback(canvas.width, canvas.height, 'canvas');
                     }
 
