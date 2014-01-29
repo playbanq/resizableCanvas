@@ -24,15 +24,20 @@ function resizableCanvas(canvas) {
     // Define the canvas object interface
     var properties = {
         onResize: {
-            value: function (minimumWidth, minimumHeight, callback) {
-                minWidth = minimumWidth;
-                minHeight = minimumHeight;
+            value: function (options, callback) {
+                if (typeof options === 'function') {
+                    callback = options;
+                    options = {};
+                } 
+                minWidth = options && options.minWidth || 0;
+                minHeight = options && options.minHeight || 0;
                 var mousedown;
+
                 window.addEventListener('resize', function () {
-                    if (window.innerWidth < canvas.width && window.innerWidth >= minWidth) {
+                    if (options.fullscreen || window.innerWidth < canvas.width && window.innerWidth >= minWidth) {
                         canvas.width = window.innerWidth;
                     }
-                    if (window.innerHeight < canvas.height && window.innerHeight >= minHeight) {
+                    if (options.fullscreen || window.innerHeight < canvas.height && window.innerHeight >= minHeight) {
                         canvas.height = window.innerHeight;
                     }
                     callback(canvas.width, canvas.height, 'window');
@@ -69,19 +74,21 @@ function resizableCanvas(canvas) {
                         edges.bottom = true;
                     }
 
-                    if (edges.bottom && edges.right || edges.top && edges.left) {
-                        canvas.style.cursor = 'nwse-resize';
-                    } else if (edges.bottom && edges.left || edges.top && edges.right) {
-                        canvas.style.cursor = 'nesw-resize';
-                    } else if (edges.bottom || edges.top) {
-                        canvas.style.cursor = 'ns-resize';
-                    } else if (edges.right || edges.left) {
-                        canvas.style.cursor = 'ew-resize';
-                    } else {
-                        canvas.style.cursor = 'auto';
+                    if (!options.fullscreen) {
+                        if (edges.bottom && edges.right || edges.top && edges.left) {
+                            canvas.style.cursor = 'nwse-resize';
+                        } else if (edges.bottom && edges.left || edges.top && edges.right) {
+                            canvas.style.cursor = 'nesw-resize';
+                        } else if (edges.bottom || edges.top) {
+                            canvas.style.cursor = 'ns-resize';
+                        } else if (edges.right || edges.left) {
+                            canvas.style.cursor = 'ew-resize';
+                        } else {
+                            canvas.style.cursor = 'auto';
+                        }
                     }
 
-                    if (mousedown && cursor.x && cursor.y) {
+                    if (!options.fullscreen && mousedown && cursor.x && cursor.y) {
                         if (lastEdges.bottom && lastEdges.right) {
                             canvas.width -= cursor.x - event.clientX;
                             canvas.height -= cursor.y - event.clientY;

@@ -1,13 +1,18 @@
 var canvas = document.getElementById('resizableCanvas'),
-    context = canvas.getContext('2d');;
+    context = canvas.getContext('2d'),
+    options = {
+        minWidth: 600,
+        minHeight: 300,
+        fullscreen: false
+    };
 
 ResizableCanvas.extend(canvas);
-canvas.setSize(500, 500);
+canvas.setSize(window.innerWidth - 40, window.innerHeight - 40);
 canvas.style.backgroundColor = 'rgb(128, ' + Math.floor(canvas.width/10) + 
                                 ', ' + Math.floor(canvas.height/5) + ')';
 
 // Handle canvas/window resizing
-canvas.onResize(300, 300, function (width, height, type) {
+canvas.onResize(options, function (width, height, type) {
     var green = Math.floor(width/10),
         blue = Math.floor(height/5);
     canvas.style.backgroundColor = 'rgb(128, ' + green + ', ' + blue + ')';
