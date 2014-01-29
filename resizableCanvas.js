@@ -15,6 +15,9 @@ function resizableCanvas(canvas) {
         return;
     }
 
+    // Track cursor position
+    var cursor = { x: undefined, y: undefined };
+
     // Define the canvas object interface
     var properties = {
         onResize: {
@@ -48,15 +51,30 @@ function resizableCanvas(canvas) {
                         edges.bottom = true;
                     }
 
-                    if (edges.top && edges.left || edges.bottom && edges.right) {
+                    if (edges.bottom && edges.right) {
                         canvas.style.cursor = 'nwse-resize';
-                    } else if (edges.top && edges.right || edges.bottom && edges.left) {
-                        canvas.style.cursor = 'nesw-resize';
-                    } else if (edges.top || edges.bottom) {
+                    } else if (edges.bottom) {
                         canvas.style.cursor = 'ns-resize';
-                    } else if (edges.left || edges.right) {
+                    } else if (edges.right) {
                         canvas.style.cursor = 'ew-resize';
+                    } else {
+                        canvas.style.cursor = 'auto';
                     }
+
+                    if (mousedown && cursor.x && cursor.y) {
+                        if (edges.bottom && edges.right) {
+                            canvas.width -= cursor.x - event.clientX;
+                            canvas.height -= cursor.y - event.clientY;
+                        } else if (edges.right) {
+                            canvas.width -= cursor.x - event.clientX;
+                        } else if (edges.bottom) {
+                            canvas.height -= cursor.y - event.clientY;
+                        }
+                        callback(canvas.width, canvas.height, 'canvas');
+                    }
+
+                    cursor.x = event.clientX;
+                    cursor.y = event.clientY;
                 });
             }
         },
