@@ -25,7 +25,13 @@ function resizableCanvas(canvas) {
             value: function (callback) {
                 var mousedown;
                 window.addEventListener('resize', function () {
-                    callback(window.innerWidth, window.innerHeight, 'window');
+                    if (window.innerWidth < canvas.width) {
+                        canvas.width = window.innerWidth;
+                    }
+                    if (window.innerHeight < canvas.height) {
+                        canvas.height = window.innerHeight;
+                    }
+                    callback(canvas.width, canvas.height, 'window');
                 });
                 window.addEventListener('mousedown', function () {
                     mousedown = true;

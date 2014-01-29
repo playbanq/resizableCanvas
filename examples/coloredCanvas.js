@@ -2,7 +2,7 @@ var canvas = document.getElementById('resizableCanvas'),
     context = canvas.getContext('2d');;
 
 ResizableCanvas.extend(canvas);
-canvas.setSize(window.innerWidth - 100, window.innerHeight - 100);
+canvas.setSize();
 canvas.style.backgroundColor = 'rgb(128, ' + Math.floor(canvas.width/10) + 
                                 ', ' + Math.floor(canvas.height/5) + ')';
 
